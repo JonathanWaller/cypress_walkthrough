@@ -1,7 +1,7 @@
 const express = require("express"),
   cors = require("cors"),
   { json } = require("body-parser"),
-  port = 3001,
+  port = 3005,
   app = express();
 
 let todos = [
@@ -13,7 +13,11 @@ let todos = [
 app.use(cors());
 app.use(json());
 
-app.get("/api/todos", (req, res) => res.status(200).json(todos));
+app.get("/api/todos", (req, res) => {
+  // console.log(todos);
+  res.status(200).json(todos);
+});
+
 app.post("/api/todos", (req, res) => {
   todos.push({
     ...req.body,
@@ -21,6 +25,7 @@ app.post("/api/todos", (req, res) => {
   });
   return res.status(200).json(todos);
 });
+
 app.put("/api/todos/:id", (req, res) => {
   todos = todos.map(c => (c.id === +req.params.id ? { ...c, ...req.body } : c));
   return res.status(200).json(todos);
@@ -29,6 +34,7 @@ app.delete("/api/todos/:id", (req, res) => {
   todos = todos.filter(c => c.id !== +req.params.id);
   return res.status(200).json(todos);
 });
+
 app.listen(port, () => {
   console.log("Server listening on port", port);
 });
